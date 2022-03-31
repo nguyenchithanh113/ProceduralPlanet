@@ -17,7 +17,7 @@ public class TerrainFace
         axisB = axisB.normalized * localUp.magnitude;
     }
 
-    public Mesh ConstructMesh()
+    public Mesh ConstructMesh(ShapeGenerator shapeGenerator)
     {
         Vector3[] verts = new Vector3[resolution * resolution];
         int[] tris = new int[(resolution - 1) * (resolution - 1) * 2 * 3];
@@ -34,6 +34,8 @@ public class TerrainFace
             {
                 Vector2 percent = new Vector2(x, y) / (resolution-1);
                 Vector3 pointInFace = (localUp - axisA - axisB) + axisA * 2 * percent.x + axisB*2*percent.y ;
+                pointInFace = pointInFace.normalized;
+                pointInFace = shapeGenerator.PointOnFace(pointInFace);
                 //Vector3 pointInFace = localUp + (percent.x - 0.5f) * axisA * 2 + (percent.y - 0.5f) * axisB * 2;
                 //Debug.Log(pointInFace);
                 verts[vertIndex] = pointInFace;
@@ -61,6 +63,7 @@ public class TerrainFace
         mesh.vertices = verts;
         mesh.triangles = tris;
         mesh.uv = uvs;
+        mesh.RecalculateNormals();
         return mesh;
     }
 }
