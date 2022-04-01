@@ -16,8 +16,10 @@ public class Planet : MonoBehaviour
     [HideInInspector] public bool colorSettingFoldout;
     [Range(2, 256)]
     [SerializeField] int resolution = 2;
+    [SerializeField] NoiseFilter noiseFilter;
     [SerializeField, HideInInspector] TerrainFace[] terrainFaces;
     [SerializeField, HideInInspector] MeshFilter[] faceMeshFilters;
+    [SerializeField, HideInInspector] Vector3[][] drawVerts;
     [SerializeField] Material matFace;
     TerrainFace _TerrainFace;
     ShapeGenerator shapeGenerator;
@@ -29,6 +31,7 @@ public class Planet : MonoBehaviour
             new Face(){ direction = Vector3.forward, directionName = "Face forward" },
             new Face(){ direction = Vector3.back, directionName = "Face back" },
      };
+    
     void Start()
     {
 
@@ -41,14 +44,11 @@ public class Planet : MonoBehaviour
     public void Initializing()
     {
         
-        if (faceMeshFilters == null || faceMeshFilters.Length == 0)
+        if (faceMeshFilters == null && faceMeshFilters.Length == 0)
         {
             faceMeshFilters = new MeshFilter[6];
         }
-        if (terrainFaces == null || terrainFaces.Length == 0)
-        {
-            terrainFaces = new TerrainFace[6];
-        }
+        terrainFaces = new TerrainFace[6];
         shapeGenerator = new ShapeGenerator(shapeSetting);
         for (int i = 0; i < 6; i++)
         {
@@ -64,7 +64,7 @@ public class Planet : MonoBehaviour
                 _faceMeshRender.sharedMaterial = matFace;
                 _faceMeshRender.sharedMaterial.color = colorSetting.color;
             }
-            terrainFaces[i] = new TerrainFace(Faces[i].direction, resolution);
+            terrainFaces[i] = new TerrainFace(faceMeshFilters[i].sharedMesh,Faces[i].direction, resolution);
         }
     }
     public void GeneratePlanet()
@@ -90,9 +90,10 @@ public class Planet : MonoBehaviour
     }
     void GenertateMesh()
     {
+        
         for (int i = 0; i < faceMeshFilters.Length; i++)
         {
-            faceMeshFilters[i].mesh = terrainFaces[i].ConstructMesh(shapeGenerator);
+            terrainFaces[i].ConstructMesh(shapeGenerator);
         }
     }
     void GenerateColor()
@@ -102,5 +103,10 @@ public class Planet : MonoBehaviour
             faceMeshFilters[i].GetComponent<MeshRenderer>().sharedMaterial.color = colorSetting.color;
         }
     }
-    
+    private void OnDrawGizmos()
+    {
+
+        
+    }
+
 }

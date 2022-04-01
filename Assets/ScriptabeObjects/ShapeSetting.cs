@@ -5,4 +5,5 @@ using UnityEngine;
 public class ShapeSetting : ScriptableObject
 {
     public float radius = 1;
+    public NoiseSetting[] noiseSetting;
 }

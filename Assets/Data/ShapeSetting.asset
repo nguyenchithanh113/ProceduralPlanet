@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e042ab648ed107b438e34fc5addbb4bb, type: 3}
   m_Name: ShapeSetting
   m_EditorClassIdentifier: 
-  radius: 1
+  radius: 2
+  noiseSetting: []

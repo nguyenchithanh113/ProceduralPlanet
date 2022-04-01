@@ -14,6 +14,7 @@ public class PlanetCustomInspector : Editor
         {
             planet = (Planet)target;
         }
+        
     }
     public override void OnInspectorGUI()
     {

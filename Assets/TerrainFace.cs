@@ -8,8 +8,10 @@ public class TerrainFace
     public Vector3 localUp;
     public Vector3 axisA;
     public Vector3 axisB;
-    public TerrainFace(Vector3 _up, int _resolution)
+    Mesh mesh;
+    public TerrainFace(Mesh _mesh,Vector3 _up, int _resolution)
     {
+        mesh = _mesh;
         resolution = _resolution;
         localUp = _up;
         axisA = new Vector3(localUp.y, localUp.z, localUp.x);
@@ -17,15 +19,11 @@ public class TerrainFace
         axisB = axisB.normalized * localUp.magnitude;
     }
 
-    public Mesh ConstructMesh(ShapeGenerator shapeGenerator)
+    public void ConstructMesh(ShapeGenerator shapeGenerator)
     {
         Vector3[] verts = new Vector3[resolution * resolution];
         int[] tris = new int[(resolution - 1) * (resolution - 1) * 2 * 3];
         Vector2[] uvs = new Vector2[verts.Length];
-
-        Vector2[,] testArr = new Vector2[resolution, resolution];
-
-        int i = 0;
         int trisIndex = 0;
         int vertIndex = 0;
         for(int y = 0; y < resolution; y++)
@@ -59,11 +57,10 @@ public class TerrainFace
                 vertIndex += 1;
             }
         }
-        Mesh mesh = new Mesh();
+        mesh.Clear();
         mesh.vertices = verts;
         mesh.triangles = tris;
         mesh.uv = uvs;
         mesh.RecalculateNormals();
-        return mesh;
     }
 }
